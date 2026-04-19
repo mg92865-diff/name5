@@ -1,1 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>LocalStorage Test</title>
+</head>
+<body style="font-family: Arial; font-size: 18px; padding: 20px;">
 
+  <h2>LocalStorage Status</h2>
+  <div id="status"></div>
+
+  <h2>Stored Data</h2>
+  <pre id="output"></pre>
+
+  <h2>Test Controls</h2>
+  <input id="key" placeholder="Key" />
+  <input id="value" placeholder="Value" />
+  <button onclick="saveData()">Save</button>
+  <button onclick="clearData()">Clear All</button>
+
+  <script>
+    function checkLocalStorage() {
+      try {
+        const testKey = "__test__";
+        localStorage.setItem(testKey, "ok");
+        localStorage.removeItem(testKey);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function showStatus() {
+      const statusDiv = document.getElementById("status");
+
+      if (checkLocalStorage()) {
+        statusDiv.innerHTML = "✅ localStorage is AVAILABLE and WORKING";
+      } else {
+        statusDiv.innerHTML = "❌ localStorage is NOT available";
+      }
+    }
+
+    function displayStorage() {
+      const output = document.getElementById("output");
+
+      if (localStorage.length === 0) {
+        output.textContent = "(empty)";
+        return;
+      }
+
+      let result = "";
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const value = localStorage.getItem(key);
+        result += key + " = " + value + "\n";
+      }
+
+      output.textContent = result;
+    }
+
+    function saveData() {
+      const key = document.getElementById("key").value;
+      const value = document.getElementById("value").value;
+
+      if (!key) {
+        alert("Enter a key");
+        return;
+      }
+
+      localStorage.setItem(key, value);
+      displayStorage();
+    }
+
+    function clearData() {
+      localStorage.clear();
+      displayStorage();
+    }
+
+    // Run on load
+    showStatus();
+    displayStorage();
+  </script>
+
+</body>
+</html>
